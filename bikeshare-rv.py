@@ -66,7 +66,7 @@ def get_filters():
         else:
             print('\nOk, no problem! Let\'s try again!')
 
-    print('-'*40)
+    print('-'*60)
     return city, month, day
 
 def load_data(city, month, day):
@@ -132,7 +132,7 @@ def load_data(city, month, day):
         df = df.loc[df['Day_of_Week'] == day.title()]
 
     print("\nThis took %s seconds." % (time.time() - start_time))
-    print('-'*40)
+    print('-'*60)
 
     return df
 
@@ -178,7 +178,7 @@ def station_stats(df):
     print('The most frequent combination of Start Station and End Station is: ', popular_station_combo)
 
     print("\nThis took %s seconds." % (time.time() - start_time))
-    print('-'*40)
+    print('-'*60)
 
 
 def trip_duration_stats(df):
@@ -204,7 +204,7 @@ def trip_duration_stats(df):
     print('The mean travel time is: ', mean_travel_time)
 
     print("\nThis took %s seconds." % (time.time() - start_time))
-    print('-'*40)
+    print('-'*60)
 
 
 def user_stats(df):
@@ -239,7 +239,7 @@ def user_stats(df):
     except:
         print('\nSorry, no data is available about birth year in this city.')
     print("\nThis took %s seconds." % (time.time() - start_time))
-    print('-'*40)
+    print('-'*60)
 
 
 def raw_data(df):

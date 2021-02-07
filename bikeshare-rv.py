@@ -12,7 +12,7 @@ weekdays = ['all', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'satu
 
 
 def choice(response, choices=('yes', 'no')):
-    """Returns a valid response or choice from the user input 
+    """Returns a valid response or choice from the user input
     """
     # each user input goes through function for validation
     while True:
@@ -41,14 +41,14 @@ def get_filters():
     Asks user to specify a city, month, and day to analyze.
 
     Returns:
-        (str) city - name of the city to analyze
+        (str) city - name of the city to analyze OR (list) cities
         (str) month - name of the month to filter by, or "all" to apply no month filter
         (str) day - name of the day of week to filter by, or "all" to apply no day filter
     """
     print('Hello! Let\'s explore some US bikeshare data! You can type \'end\' to exit the program at anytime.')
 
     while True:
-        # get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs
+        # get user input for city (chicago, new york city, washington), allowing single or multiple entries
         city = choice('\nSelect one (or more) of the following cities: Chicago, New York City, or Washington. Please '
                     'separate by commas if more than one city.\n', CITY_DATA.keys())
         # get user input for month (january, february, ... , june)
@@ -56,13 +56,13 @@ def get_filters():
                        'by commas if more than one month.\n>', months)
         # get user input for day of week (monday, tuesday, ... sunday)
         day = choice('\nWhich weekday(s) would you like to filter bikeshare data? Please use commas to list the names.\n>', weekdays)
-        
-        # ask to confirm of user input before calculation begins 
-        confirm = choice('\nPlease confirm your selected bikeshare data filter(s).\n\n City or Cities: {}\n Month(s): {}\n Weekday(s): {}\n\n [yes]\n [no]\n\n>'.format(city, month, day))
+
+        # ask to confirm of user input before calculation begins
+        confirm = choice('\nPlease confirm your data filter(s).\n\n City or Cities: {}\n Month(s): {}\n Weekday(s): {}\n\n [yes]\n [no]\n\n>'.format(city, month, day))
 
         if confirm == 'yes':
             break
-        # while loop runs again if user does not confirm    
+        # while loop runs again if user does not confirm
         else:
             print('\nOk, no problem! Let\'s try again!')
 
@@ -82,7 +82,7 @@ def load_data(city, month, day):
     """
     print('\nPlease wait while the program loads the selected Bikeshare data.\n')
     start_time = time.time()
-        
+
     # case when more than one city is selected
     if isinstance(city, list):
         # combine csv files of multiple cities
@@ -101,17 +101,15 @@ def load_data(city, month, day):
     else:
         #load data file into a dataframe for a single city
         df = pd.read_csv(CITY_DATA[city])
-        
+
     # convert the Start Time column to datetime
     df['Start Time'] = pd.to_datetime(df['Start Time'])
-    
+
     # extract month, day of week and start hour from Start Time to create new columns
     df['Month'] = df['Start Time'].dt.month
     df['Day_of_Week'] = df['Start Time'].dt.weekday_name
     df['Start_Hour'] = df['Start Time'].dt.hour
-    
 
-        
     # case when multiple months are selected
     if isinstance(month, list):
         # concatenate the chosen months
@@ -119,12 +117,12 @@ def load_data(city, month, day):
 
     # apply month filter if applicable
     elif month != 'all':
-        # only a single month is chosen 
+        # only a single month is chosen
         # use the index of the months list to get the corresponding int
         month = months.index(month.lower())
         # filter by month to create the new dataframe
         df = df.loc[df['Month'] == month]
-        
+
     # case when multiple weekdays are selected
     if isinstance(day, list):
         df = pd.concat(map(lambda day: df[df['Day_of_Week'] == (day.title())], day))
@@ -132,7 +130,6 @@ def load_data(city, month, day):
     elif day != 'all':
         # when a single day is selected
         df = df.loc[df['Day_of_Week'] == day.title()]
-
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
@@ -149,11 +146,11 @@ def time_stats(df):
     # display the most common month
     popular_month = df['Month'].mode()[0]
     print('The most common month for travel is: ', months[popular_month].title())
-    
+
     # display the most common day of week
     popular_day = df['Day_of_Week'].mode()[0]
     print('The most common day for travel is: ', popular_day)
-    
+
     # display the most common start hour
     popular_hour = df['Start_Hour'].mode()[0]
     print('The most common hour for travel is: {}h00'.format(popular_hour))
@@ -172,7 +169,7 @@ def station_stats(df):
     popular_start_station = str(df['Start Station'].mode()[0])
     print('The most commonly used Start Station is: ', popular_start_station)
 
-    # display most commonly used end             
+    # display most commonly used end
     popular_end_station = str(df['End Station'].mode()[0])
     print('The most commonly used End Station is: ', popular_end_station)
 
@@ -198,7 +195,7 @@ def trip_duration_stats(df):
                          str(int(((total_travel_time % 86400) % 3600) // 60)) + ' minute(s) ' +
                          str(int(((total_travel_time % 86400) % 3600) % 60)) + ' second(s)')
     print('The total travel time is: ', total_travel_time)
-    
+
     # display mean travel time
     mean_travel_time = df['Trip Duration'].mean()
     # convert to minutes and seconds
@@ -244,7 +241,7 @@ def user_stats(df):
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
-    
+
 def raw_data(df):
     """Raw data is displayed upon request by user """
     # displays the heading of raw data
@@ -258,7 +255,7 @@ def raw_data(df):
             return
         row += 5
         print(df.iloc[row:row + 5])
-    
+
 
 def main():
     while True:

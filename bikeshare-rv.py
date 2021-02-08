@@ -117,13 +117,12 @@ def load_data(city, month, day):
 
     # apply month filter if applicable
     elif month != 'all':
-        # only a single month is chosen
-        # use the index of the months list to get the corresponding int
+        # for any month, use the index of the months list to get the corresponding int
         month = months.index(month.lower())
         # filter by month to create the new dataframe
         df = df.loc[df['Month'] == month]
 
-    # case when multiple weekdays are selected
+    # when multiple weekdays are selected
     if isinstance(day, list):
         df = pd.concat(map(lambda day: df[df['Day_of_Week'] == (day.title())], day))
     # apply day filter if applicable

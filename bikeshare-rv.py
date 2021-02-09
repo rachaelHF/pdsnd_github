@@ -41,14 +41,14 @@ def get_filters():
     Asks user to specify a city, month, and day to analyze.
 
     Returns:
-        (str) city - name of the city to analyze, or multiple cities
+        (str) city - name of the city to analyze OR (list) cities
         (str) month - name of the month to filter by, or "all" to apply no month filter
         (str) day - name of the day of week to filter by, or "all" to apply no day filter
     """
     print('Hello! Let\'s explore some US bikeshare data! You can type \'end\' to exit the program at anytime.')
 
     while True:
-        # get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs
+        # get user input for city (chicago, new york city, washington), allowing single or multiple entries
         city = choice('\nSelect one (or more) of the following cities: Chicago, New York City, or Washington. Please '
                     'separate by commas if more than one city.\n', CITY_DATA.keys())
         # get user input for month (january, february, ... , june)
@@ -66,7 +66,7 @@ def get_filters():
         else:
             print('\nOk, no problem! Let\'s try again!')
 
-    print('-'*40)
+    print('-'*60)
     return city, month, day
 
 def load_data(city, month, day):
@@ -125,7 +125,7 @@ def load_data(city, month, day):
         # filter by month to create the new dataframe
         df = df.loc[df['Month'] == month]
 
-    # case when multiple weekdays are selected
+    # when multiple weekdays are selected
     if isinstance(day, list):
         df = pd.concat(map(lambda day: df[df['Day_of_Week'] == (day.title())], day))
     # apply day filter if applicable
@@ -133,9 +133,8 @@ def load_data(city, month, day):
         # when a single day is selected
         df = df.loc[df['Day_of_Week'] == day.title()]
 
-
     print("\nThis took %s seconds." % (time.time() - start_time))
-    print('-'*40)
+    print('-'*60)
 
     return df
 
@@ -181,7 +180,7 @@ def station_stats(df):
     print('The most frequent combination of Start Station and End Station is: ', popular_station_combo)
 
     print("\nThis took %s seconds." % (time.time() - start_time))
-    print('-'*40)
+    print('-'*60)
 
 
 def trip_duration_stats(df):
@@ -207,7 +206,7 @@ def trip_duration_stats(df):
     print('The mean travel time is: ', mean_travel_time)
 
     print("\nThis took %s seconds." % (time.time() - start_time))
-    print('-'*40)
+    print('-'*60)
 
 
 def user_stats(df):
@@ -242,7 +241,7 @@ def user_stats(df):
     except:
         print('\nSorry, no data is available about birth year in this city.')
     print("\nThis took %s seconds." % (time.time() - start_time))
-    print('-'*40)
+    print('-'*60)
 
 
 def raw_data(df):
